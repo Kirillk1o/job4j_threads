@@ -12,14 +12,14 @@ public class ParseFile {
 
      private synchronized String getContent(Predicate<Integer> filer) throws IOException {
          try (InputStream i = new FileInputStream(file)) {
-             String output = "";
+             StringBuilder builder = new StringBuilder();
              int data;
-             while ((data = i.read()) > 0) {
+             while ((data = i.read()) != -1) {
                  if (filer.test(data)) {
-                     output += (char) data;
+                     builder.append((char) data);
                  }
              }
-             return output;
+             return builder.toString();
          }
      }
 
