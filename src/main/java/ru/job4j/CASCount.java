@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ThreadSafe
 public class CASCount {
     private final AtomicReference<Integer> count = new AtomicReference<>();
-    AtomicInteger atomicIntegeric = new AtomicInteger();
     private volatile int value = count.get();
     private volatile int next;
 
