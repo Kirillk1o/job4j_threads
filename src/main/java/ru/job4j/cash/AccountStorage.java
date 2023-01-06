@@ -17,18 +17,15 @@ public class AccountStorage {
     }
 
     public synchronized boolean update(Account account) {
-        return accounts.replace(account.id(), account) != null;
+        return accounts.replace(account.id(), accounts.get(account.id()), account);
     }
 
     public synchronized boolean delete(int id) {
-        return accounts.remove(id) != null;
+        return accounts.remove(id, accounts.get(id));
     }
 
     public synchronized Optional<Account> getById(int id) {
-        if (accounts.containsValue(id)) {
-            return Optional.of(accounts.get(id));
-        }
-        return Optional.empty();
+       return Optional.ofNullable(accounts.get(id));
     }
 
         public synchronized boolean transfer(int fromId, int toId, int amount) {
