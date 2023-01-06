@@ -20,7 +20,7 @@ public class SingleLockList<T> implements Iterable<T> {
         list.add(value);
     }
 
-    public synchronized T get(int index) {
+    public synchronized T get(int index){
         return list.get(index);
     }
 
