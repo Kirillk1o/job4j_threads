@@ -10,19 +10,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ThreadSafe
 public class CASCount {
     private final AtomicReference<Integer> count = new AtomicReference<>();
-    private volatile int value = count.get();
-    private volatile int next;
 
     public void increment() {
+        int value;
+        int next;
         do {
-            next = value++;
+            value = count.get();
+           next = value + 1;
         } while (!count.compareAndSet(value, next));
     }
 
     public int get() {
-        if (value == 0) {
-            throw new UnsupportedOperationException("Count is not impl.");
-        }
-        return value;
+        return count.get();
     }
 }
