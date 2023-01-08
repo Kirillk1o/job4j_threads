@@ -6,6 +6,7 @@ import net.jcip.annotations.ThreadSafe;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
@@ -17,31 +18,19 @@ public class SimpleBlockingQueue<T> {
         this.size = size;
     }
 
-    public void offer(T value) {
-        synchronized (this) {
-            while (queue.size() == size) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            queue.offer(value);
-            notify();
+    public synchronized void offer(T value) throws InterruptedException {
+        while (queue.size() == size) {
+            this.wait();
         }
+        queue.offer(value);
+        this.notify();
     }
 
-        public T poll() {
-            synchronized (this) {
-                while (queue.isEmpty()) {
-                    try {
-                        queue.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                notify();
-                return queue.poll();
-            }
+    public synchronized T poll() throws InterruptedException {
+        while (queue.isEmpty()) {
+            this.wait();
+            this.notify();
         }
+        return queue.poll();
+    }
 }

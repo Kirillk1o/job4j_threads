@@ -18,14 +18,23 @@ class SimpleBlockingQueueTest {
         Thread producerThread = new Thread(
                 () -> {
                     for (int i = 0; i < 5; i++) {
-                        queue.offer(i);
+                        try {
+                            queue.offer(i);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
         );
         Thread consumerThread = new Thread(
                 () -> {
                     for (int i = 0; i < 5; i++) {
-                        int tmp = queue.poll();
+                        int tmp = 0;
+                        try {
+                            tmp = queue.poll();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         atomicInteger.set(tmp);
                         list.add(tmp);
                     }
