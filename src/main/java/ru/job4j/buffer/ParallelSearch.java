@@ -27,14 +27,14 @@ public class ParallelSearch {
                             Thread.currentThread().interrupt();
                         }
                     }
-                    consumer.interrupt();
-                    System.out.println(consumer.isInterrupted());
                 }
         );
         producer.start();
         consumer.start();
         try {
             producer.join();
+            consumer.interrupt();
+            System.out.println(consumer.isInterrupted());
             consumer.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
