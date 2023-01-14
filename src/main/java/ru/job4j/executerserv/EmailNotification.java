@@ -4,27 +4,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class EmailNotification {
-    private final User user;
     private final ExecutorService pool = Executors.newFixedThreadPool(
             Runtime.getRuntime().availableProcessors());
-
-    public EmailNotification(User user) {
-        this.user = user;
-    }
 
     /*
     метод должен через ExecutorService отправлять почту.
      */
     public void emailTo(User user) {
-        pool.submit(new Runnable() {
-            @Override
-            public void run() {
-                String subject = "Notification " + user.getUserName() + " to email" + user.getEmail();
-                String body = "Add a new event to" + user.getUserName();
-                send(subject, body, user.getEmail());
-            }
+        pool.submit(() -> {
+            String subject = "Notification " + user.getUserName() + " to email" + user.getEmail();
+            String body = "Add a new event to" + user.getUserName();
+            send(subject, body, user.getEmail());
         });
-        close();
     }
 
     /*
